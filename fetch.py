@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Fetch coduri de reducere OVS de pe shopilo.it
-Sursa: https://shopilo.it/magazin/ovs.it
+Recupero codici sconto OVS da shopilo.it
+Sursa: https://shopilo.it/negozi/ovs.it
 """
 
 import requests
@@ -9,12 +9,12 @@ from bs4 import BeautifulSoup
 import json
 from datetime import datetime
 
-SHOPILO_URL = "https://shopilo.it/magazin/ovs.it"
+SHOPILO_URL = "https://shopilo.it/negozi/ovs.it"
 STORE_NAME = "OVS"
 
 
 def fetch_coupons(url=SHOPILO_URL):
-    """Returneaza lista de cupoane active pentru OVS de pe shopilo.it"""
+    """Restituisce la lista dei coupon attivi per OVS da shopilo.it"""
     headers = {
         "User-Agent": "Mozilla/5.0 (compatible; coupon-fetcher/1.0; +https://github.com/shopilo-it/codice-sconto-ovs)"
     }
@@ -22,7 +22,7 @@ def fetch_coupons(url=SHOPILO_URL):
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
     except requests.RequestException as e:
-        print(f"Eroare la fetch: {e}")
+        print(f"Errore nel recupero: {e}")
         return []
 
     soup = BeautifulSoup(response.content, "html.parser")
@@ -51,11 +51,11 @@ def fetch_coupons(url=SHOPILO_URL):
 
 
 if __name__ == "__main__":
-    print(f"Fetching coduri reducere {STORE_NAME} de pe shopilo.it...\n")
+    print(f"Recupero codici sconto {{STORE_NAME}} da shopilo.it...\n")
     coupons = fetch_coupons()
 
     if coupons:
         print(json.dumps(coupons, ensure_ascii=False, indent=2))
-        print(f"\nTotal: {len(coupons)} cupoane gasite")
+        print(f"\nTotale: {{len(coupons)}} coupon trovati")
     else:
-        print(f"Nu s-au gasit cupoane. Vezi lista completa la: {SHOPILO_URL}")
+        print(f"Nessun coupon trovato. Lista completa su: {SHOPILO_URL}")
